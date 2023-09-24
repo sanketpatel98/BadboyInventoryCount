@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import ScannedItem from './ScannedItem';
 
 const LocationGroup = ({ location, data, onRemoveItem, onUpdateQuantity }) => {

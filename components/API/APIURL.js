@@ -1,0 +1,1 @@
+export default API_BASE_URL = 'https://script.google.com/macros/s/AKfycbxgTd0vQm_CTM13wx_ZHziH0s3lR-fxjDIDe7Et91Go55hIh7v3UTDGRFIUodWbr0Vs7g/exec';

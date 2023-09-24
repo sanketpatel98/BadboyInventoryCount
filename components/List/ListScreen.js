@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { View, FlatList, StyleSheet, Button } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { removeScannedItem, removeAllScannedItems, updateScannedItem } from '../../redux/actions';
+import { Button, FlatList, StyleSheet, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { addScannedItem, removeAllScannedItems, updateScannedItem } from '../../redux/actions';
 import EmptyState from './EmptyState';
+import { uploadDataToGoogleSheet } from './GoogleSheetUploader'; // Import the updated GoogleSheetUploader module
 import LocationGroup from './LocationGroup';
 import RemoveAllButton from './RemoveAllButton';
-import EmailButton from './EmailButton';
-import { uploadDataToGoogleSheet } from './GoogleSheetUploader'; // Import the updated GoogleSheetUploader module
+import { Snackbar } from "react-native-paper";
 
 const ListScreen = () => {
-  const scannedItems = useSelector((state) => state.scannedItems);
+  const scannedItems = useSelector((state) => state.reducer.scannedItems);
   const dispatch = useDispatch();
   const [uploading, setUploading] = useState(false); // State to track uploading status
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
 
   const groupItemsByLocation = (items) => {
     const groupedItems = {};
@@ -43,6 +44,12 @@ const ListScreen = () => {
     dispatch(removeAllScannedItems());
   };
 
+  const addRemainingItems = (remainingItems) => {
+    remainingItems.forEach((item)=>{
+      dispatch(addScannedItem(item.barcode, item.location, item.quantity));
+    })
+  }
+
   const handleUploadToGoogleSheet = async () => {
     if (uploading) {
       return;
@@ -54,10 +61,17 @@ const ListScreen = () => {
       const response = await uploadDataToGoogleSheet(scannedItems);
 
       if (response.status === 200) {
-        console.log('Data uploaded to Google Sheet successfully!');
+        setSnackbarVisible(true);
+
+        setTimeout(() => {
+          setSnackbarVisible(false);
+        }, 3000);
       } else {
         console.log('Error uploading data to Google Sheet:', response.statusText);
       }
+
+      handleRemoveAllScannedItems();
+      addRemainingItems(response.data);
 
       setUploading(false);
     } catch (error) {
@@ -95,6 +109,14 @@ const ListScreen = () => {
         handleRemoveAllScannedItems={handleRemoveAllScannedItems}
       />
       <Button title={uploading ? 'Uploading...' : 'Upload'} onPress={handleUploadToGoogleSheet} disabled={uploading} color="#5DBB63"/>
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        duration={3000} 
+        style={styles.snackbar}
+      >
+        Data added successfully to the Sheet!
+      </Snackbar>
     </View>
   );
 };

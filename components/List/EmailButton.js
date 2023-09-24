@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Button, Alert, TextInput, StyleSheet, View } from 'react-native';
-import * as MailComposer from 'expo-mail-composer';
 import * as FileSystem from 'expo-file-system';
+import * as MailComposer from 'expo-mail-composer';
+import React, { useState } from 'react';
+import { Alert, Button, StyleSheet, TextInput, View } from 'react-native';
 
 const EmailButton = ({ scannedItems }) => {
   const [isModalVisible, setModalVisible] = useState(false);

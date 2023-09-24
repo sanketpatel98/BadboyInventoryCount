@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { addScannedItem } from '../../redux/actions';
+import { Picker } from "@react-native-picker/picker";
 
 const ManualBarcodeEntryScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [barcode, setBarcode] = useState('');
   const [quantity, setQuantity] = useState('1');
   const [barcodeType, setBarcodeType] = useState('Normal');
-  const [location, setLocation] = useState('Floor');
+  const [location, setLocation] = useState('a'); // Default location set to 'A'
+
+  const scannedItems = useSelector((state) => state.reducer.scannedItems);
 
   const handleRadioPress = (type) => {
     setBarcodeType(type);
@@ -23,9 +26,24 @@ const ManualBarcodeEntryScreen = ({ navigation }) => {
   };
 
   const handleAddBarcode = () => {
-    // const formattedBarcode = barcodeType === 'Normal' ? barcode : `${barcode}-${barcodeType.charAt(0)}`;
-    
-    dispatch(addScannedItem(barcode, location, parseInt(quantity)));
+    const existingItemIndex = scannedItems.findIndex(
+      (item) =>
+        item.barcode.toString() === barcode && item.location === location
+    );
+
+    if (existingItemIndex !== -1) {
+      const updatedScannedItems = [...scannedItems];
+      const existingCounter = parseInt(
+        updatedScannedItems[existingItemIndex].counter
+      );
+      const newQuantity = parseInt(quantity);
+      updatedScannedItems[existingItemIndex].counter = (
+        existingCounter + newQuantity
+      ).toString();
+      dispatch({ type: "SET_SCANNED_ITEMS", payload: updatedScannedItems });
+    } else {
+      dispatch(addScannedItem(barcode, location, quantity));
+    }
     navigation.goBack();
   };
 
@@ -39,12 +57,37 @@ const ManualBarcodeEntryScreen = ({ navigation }) => {
         onChangeText={setBarcode}
         keyboardType="numeric"
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Location (default: Floor)"
-        value={location}
-        onChangeText={setLocation}
-      />
+      <View style={styles.dropdownContainer}>
+        <Picker
+          selectedValue={location}
+          onValueChange={(itemValue) => setLocation(itemValue)}
+        >
+          <Picker.Item label="A" value="a" />
+          <Picker.Item label="B" value="b" />
+          <Picker.Item label="C" value="c" />
+          <Picker.Item label="D" value="d" />
+          <Picker.Item label="E" value="e" />
+          <Picker.Item label="F" value="f" />
+          <Picker.Item label="G" value="g" />
+          <Picker.Item label="H" value="h" />
+          <Picker.Item label="I" value="i" />
+          <Picker.Item label="J" value="j" />
+          <Picker.Item label="K" value="k" />
+          <Picker.Item label="L" value="l" />
+          <Picker.Item label="M" value="m" />
+          <Picker.Item label="N" value="n" />
+          <Picker.Item label="O" value="o" />
+          <Picker.Item label="P" value="p" />
+          <Picker.Item label="Q" value="q" />
+          <Picker.Item label="R" value="r" />
+          <Picker.Item label="S" value="s" />
+          <Picker.Item label="T" value="t" />
+          <Picker.Item label="U" value="u" />
+          <Picker.Item label="V" value="v" />
+          <Picker.Item label="W" value="w" />
+          <Picker.Item label="X" value="x" />
+        </Picker>
+      </View>
       <View style={styles.radioContainer}>
         <TouchableOpacity
           style={[styles.radioOption, barcodeType === 'Normal' && styles.radioSelected]}
@@ -101,6 +144,15 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginBottom: 16,
     paddingHorizontal: 10,
+  },
+  dropdownContainer: {
+    width: '100%',
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    marginBottom: 16,
+    justifyContent: 'center',
   },
   radioContainer: {
     flexDirection: 'row',

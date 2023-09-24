@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const ScannedItem = ({ item, onRemove, onUpdateQuantity }) => {
   const [isEditing, setIsEditing] = useState(false);

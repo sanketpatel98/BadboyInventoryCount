@@ -1,6 +1,12 @@
 // redux/store.js
-import { createStore } from 'redux';
-import rootReducer from './reducers';
+import { createStore, combineReducers } from "redux";
+import reducer from "./reducers";
+import auditReducer from "./auditReducer";
+
+const rootReducer = combineReducers({
+  reducer,
+  auditReducer,
+});
 
 const store = createStore(rootReducer);
 

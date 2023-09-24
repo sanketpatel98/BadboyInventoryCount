@@ -1,30 +1,25 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  StatusBar,
-  TouchableOpacity,
-} from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import Dialog from "react-native-dialog";
+import React, { useEffect, useState } from "react";
+import {
+  StatusBar, StyleSheet, Text, TouchableOpacity, View
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { addScannedItem } from "../../redux/actions";
 import BarcodeDialog from "./BarcodeDialog"; // Import your BarcodeDialog component
 import LocationDialog from "./LocationDialog"; // Import your LocationDialog component
-import { addScannedItem } from "../../redux/actions";
 
 const BarcodeScanner = () => {
   const dispatch = useDispatch();
   const [hasPermission, setHasPermission] = useState(null);
   const [isScanning, setIsScanning] = useState(true);
   const [barcodeData, setBarcodeData] = useState("");
-  const [location, setLocation] = useState("Floor");
+  const [location, setLocation] = useState("a");
   const [selectedOption, setSelectedOption] = useState("Normal");
   const [showBarcodeDialog, setShowBarcodeDialog] = useState(false);
   const [showLocationDialog, setShowLocationDialog] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const scannedItems = useSelector((state) => state.scannedItems);
+  const scannedItems = useSelector((state) => state.reducer.scannedItems);
 
   const handleBarCodeScanned = ({ data }) => {
     setIsScanning(false);
