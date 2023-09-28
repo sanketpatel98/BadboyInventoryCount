@@ -83,7 +83,7 @@ const AuditScreen = () => {
       <Button
         title="Start Scanning"
         onPress={() => navigation.navigate("AuditScanner", { selectedOption })}
-        disabled={!selectedOption }
+        disabled={auditItems.length === 0}
       />
   
       {isLoading ? (

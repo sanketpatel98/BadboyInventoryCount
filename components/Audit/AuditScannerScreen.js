@@ -20,7 +20,7 @@ const AuditScannerScreen = ({ route, navigation }) => {
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
-  const [selectedRadioOption, setSelectedRadioOption] = useState("Normal")
+  const [selectedRadioOption, setSelectedRadioOption] = useState("Normal");
 
   const dispatch = useDispatch();
 
@@ -42,26 +42,39 @@ const AuditScannerScreen = ({ route, navigation }) => {
     // You can use these totals as needed, e.g., display them in the UI or log them
     setTotalQuantity(totalQuantity);
     setTotalElements(totalElements);
-    console.log("Total Quantity:", totalQuantity);
-    console.log("Total Elements:", totalElements);
   }, [auditItems]);
 
   const handleConfirmItem = (barcode) => {
     var flag = false;
+    var specialFlag = false;
     auditItems.forEach((item) => {
-      console.log("--------------------------------------");
-      console.log(item.barcode.toString().trim() === barcodeData.toString());
-      console.log(barcodeData);
-      console.log("--------------------------------------");
+      // console.log("--------------------------------------");
+      // console.log(item.barcode.toString().trim() === barcodeData.toString());
+      // console.log(barcodeData);
+      // console.log("--------------------------------------");
       if (item.barcode.toString() === barcodeData) {
         flag = true;
-        console.log("flag changed");
-      }
+        // console.log("flag changed");
+      } 
+      // else {
+      //   if (barcodeData.endsWith("-F") || barcodeData.endsWith("-C")) {
+      //     if (item.barcode.toString() === barcodeData.slice(0, -2)) {
+      //       specialFlag = true;
+      //       console.log("Special flag log!");
+      //     }
+      //   }
+      // }
     });
 
     if (flag) {
       dispatch(removeAuditItem(barcode, selectedOption, quantity));
-    } else {
+    } 
+    // else if (specialFlag) {
+    //   dispatch(
+    //     removeAuditItem(barcodeData.slice(0, -2), selectedOption, quantity)
+    //   );
+    // } 
+    else {
       dispatch(addAuditItem(barcode, selectedOption, -parseInt(quantity)));
     }
 
@@ -260,12 +273,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16, // Optional: Add horizontal padding to center the button
   },
   radioButtonsContainer: {
-    flexDirection: 'column',
+    flexDirection: "column",
     marginTop: 8,
   },
   radioButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 8,
   },
   radioButtonLabel: {

@@ -5,6 +5,11 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case "SET_SCANNED_ITEMS":
+      return {
+        ...state,
+        scannedItems: action.payload,
+      };
     case "ADD_SCANNED_ITEM":
       return {
         ...state,

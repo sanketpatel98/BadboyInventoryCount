@@ -35,7 +35,7 @@ const auditReducer = (state = initialState, action) => {
         ...state,
         auditItems: state.auditItems
           .map((item) => {
-            console.log("Comes to remove");
+            // console.log("Comes to remove");
             if (item.barcode === action.payload.barcode) {
               const newCount = parseInt(item.quantity) - parseInt(action.payload.quantity);
               console.log(newCount);

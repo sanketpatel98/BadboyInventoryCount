@@ -19,3 +19,8 @@ export const updateScannedItem = (barcode, location, counter) => ({
   type: 'UPDATE_SCANNED_ITEM',
   payload: { barcode, location, counter },
 });
+
+export const setScannedItems = (items) => ({
+  type: 'SET_SCANNED_ITEMS',
+  payload: items,
+});

@@ -115,7 +115,7 @@ const ListScreen = () => {
         duration={3000} 
         style={styles.snackbar}
       >
-        Data added successfully to the Sheet!
+        Data added successfully added to the Sheet!
       </Snackbar>
     </View>
   );
